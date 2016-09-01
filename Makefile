@@ -38,7 +38,7 @@ postgresinitCID:
 	--env='DB_EXTENSION=pg_trgm' \
 	--cidfile="postgresinitCID" \
 	--env='DB_USER=$(DB_USER)' --env="DB_PASS=$(DB_PASS)" \
-	sameersbn/postgresql::9.5-2
+	sameersbn/postgresql:9.5-2
 
 rungitlabinit:
 	$(eval NAME := $(shell cat NAME))
@@ -103,7 +103,7 @@ runpostgres:
 	--env='DB_EXTENSION=pg_trgm' \
 	--env='DB_USER=$(DB_USER)' --env="DB_PASS=$(DB_PASS)" \
 	--volume=$(POSTGRES_DATADIR):/var/lib/postgresql/ \
-	sameersbn/postgresql::9.5-2
+	sameersbn/postgresql:9.5-2
 
 rungitlab:
 	$(eval NAME := $(shell cat NAME))
