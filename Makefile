@@ -233,7 +233,7 @@ grabmysqldatadir:
 	echo /exports/datadir/mysql > MYSQL_DATADIR
 
 grabgitlabdir:
-	-@mkdir -p /exports/datadir/gitlab
+	-@mkdir -p /exports/datadir/git
 	docker cp `cat gitlabinitCID`:/home/git/data  - |sudo tar -C /exports/datadir/git/ -pxf -
 	echo /exports/datadir/gitlab/data > GITLAB_DATADIR
 
