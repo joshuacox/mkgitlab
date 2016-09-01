@@ -223,24 +223,24 @@ mysqlgrab: grabgitlabdir grabmysqldatadir
 externgrab: grabgitlabdir grabredisdatadir
 
 grabpostgresdatadir:
-	-@mkdir -p datadir/postgresql
-	docker cp `cat postgresinitCID`:/var/lib/postgresql  - |sudo tar -C datadir -pxf -
-	echo `pwd`/datadir/postgresql > POSTGRES_DATADIR
+	-@mkdir -p /exports/datadir/postgresql
+	docker cp `cat postgresinitCID`:/var/lib/postgresql  - |sudo tar -C /exports/datadir/ -pxf -
+	echo /exports/datadir/postgresql > POSTGRES_DATADIR
 
 grabmysqldatadir:
-	-@mkdir -p datadir/mysql
-	docker cp `cat mysqlinitCID`:/var/lib/mysql  - |sudo tar -C datadir/ -pxf -
-	echo `pwd`/datadir/mysql > MYSQL_DATADIR
+	-@mkdir -p /exports/datadir/mysql
+	docker cp `cat mysqlinitCID`:/var/lib/mysql  - |sudo tar -C /exports/datadir/ -pxf -
+	echo /exports/datadir/mysql > MYSQL_DATADIR
 
 grabgitlabdir:
-	-@mkdir -p datadir/gitlab
-	docker cp `cat gitlabinitCID`:/home/git/data  - |sudo tar -C datadir/git/ -pxf -
-	echo `pwd`/datadir/gitlab/data > GITLAB_DATADIR
+	-@mkdir -p /exports/datadir/gitlab
+	docker cp `cat gitlabinitCID`:/home/git/data  - |sudo tar -C /exports/datadir/git/ -pxf -
+	echo /exports/datadir/gitlab/data > GITLAB_DATADIR
 
 grabredisdatadir:
-	-@mkdir -p datadir/redis
-	docker cp `cat redisinitCID`:/data  - |sudo tar -C datadir/redis/ -pxf -
-	echo `pwd`/datadir/redis > REDIS_DATADIR
+	-@mkdir -p /exports/datadir/redis
+	docker cp `cat redisinitCID`:/data  - |sudo tar -C /exports/datadir/redis/ -pxf -
+	echo /exports/datadir/redis > REDIS_DATADIR
 
 logs:
 	docker logs -f `cat gitlabCID`
