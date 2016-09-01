@@ -35,7 +35,7 @@ postgresinitCID:
 	--name=$(NAME)-postgresql-init \
 	-d \
 	--env='DB_NAME=$(DB_NAME)' \
-	--env 'DB_EXTENSION=pg_trgm' \
+	--env='DB_EXTENSION=pg_trgm' \
 	--cidfile="postgresinitCID" \
 	--env='DB_USER=$(DB_USER)' --env="DB_PASS=$(DB_PASS)" \
 	sameersbn/postgresql:9.4
@@ -100,7 +100,7 @@ runpostgres:
 	-d \
 	--env='DB_NAME=$(DB_NAME)' \
 	--cidfile="postgresCID" \
-	--env 'DB_EXTENSION=pg_trgm' \
+	--env='DB_EXTENSION=pg_trgm' \
 	--env='DB_USER=$(DB_USER)' --env="DB_PASS=$(DB_PASS)" \
 	--volume=$(POSTGRES_DATADIR):/var/lib/postgresql/ \
 	sameersbn/postgresql:9.4
