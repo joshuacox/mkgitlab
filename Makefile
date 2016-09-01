@@ -43,6 +43,7 @@ rungitlabinit:
 	$(eval NAME := $(shell cat NAME))
 	$(eval TAG := $(shell cat TAG))
 	$(eval GITLAB_SECRETS_DB_KEY_BASE := $(shell cat GITLAB_SECRETS_DB_KEY_BASE))
+	$(eval GITLAB_SECRETS_SECRET_KEY_BASE := $(shell cat GITLAB_SECRETS_SECRET_KEY_BASE))
 	$(eval GITLAB_SECRETS_OTP_KEY_BASE := $(shell cat GITLAB_SECRETS_OTP_KEY_BASE))
 	$(eval IP := $(shell cat IP))
 	$(eval PORT := $(shell cat PORT))
@@ -60,6 +61,7 @@ rungitlabinit:
 	--publish=$(IP):$(PORT):80 \
 	--env="DB_NAME=$(DB_NAME)" \
 	--env="GITLAB_SECRETS_DB_KEY_BASE=$(GITLAB_SECRETS_DB_KEY_BASE)" \
+	--env="GITLAB_SECRETS_SECRET_KEY_BASE=$(GITLAB_SECRETS_SECRET_KEY_BASE)" \
 	--env="GITLAB_SECRETS_OTP_KEY_BASE=$(GITLAB_SECRETS_OTP_KEY_BASE)" \
 	--env="DB_USER=$(DB_USER)" \
 	--env="DB_PASS=$(DB_PASS)" \
@@ -105,6 +107,7 @@ rungitlab:
 	$(eval NAME := $(shell cat NAME))
 	$(eval TAG := $(shell cat TAG))
 	$(eval GITLAB_SECRETS_DB_KEY_BASE := $(shell cat GITLAB_SECRETS_DB_KEY_BASE))
+	$(eval GITLAB_SECRETS_SECRET_KEY_BASE := $(shell cat GITLAB_SECRETS_SECRET_KEY_BASE))
 	$(eval GITLAB_SECRETS_OTP_KEY_BASE := $(shell cat GITLAB_SECRETS_OTP_KEY_BASE))
 	$(eval IP := $(shell cat IP))
 	$(eval PORT := $(shell cat PORT))
@@ -126,6 +129,7 @@ rungitlab:
 	--link=$(NAME)-redis:redisio \
 	--publish=$(IP):$(PORT):80 \
 	--env="GITLAB_SECRETS_DB_KEY_BASE=$(GITLAB_SECRETS_DB_KEY_BASE)" \
+	--env="GITLAB_SECRETS_SECRET_KEY_BASE=$(GITLAB_SECRETS_SECRET_KEY_BASE)" \
 	--env="GITLAB_SECRETS_OTP_KEY_BASE=$(GITLAB_SECRETS_OTP_KEY_BASE)" \
 	--env="DB_NAME=$(DB_NAME)" \
 	--env="DB_USER=$(DB_USER)" \
