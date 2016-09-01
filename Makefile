@@ -10,9 +10,9 @@ help:
 
 temp: init
 
-init: GITLAB_SECRETS_OTP_KEY_BASE GITLAB_SECRETS_SECRET_KEY_BASE GITLAB_SECRETS_DB_KEY_BASE TAG IP SMTP_HOST SMTP_PORT SMTP_PASS SMTP_USER DB_USER DB_NAME DB_PASS NAME PORT rmall runpostgresinit runredisinit rungitlabinit
+init: GITLAB_SECRETS_OTP_KEY_BASE GITLAB_SECRETS_SECRET_KEY_BASE GITLAB_SECRETS_DB_KEY_BASE TAG IP SMTP_HOST SMTP_PORT SMTP_PASS SMTP_USER DB_USER DB_NAME DB_PASS NAME PORT SSH_PORT rmall runpostgresinit runredisinit rungitlabinit
 
-run: TAG IP GITLAB_SECRETS_OTP_KEY_BASE GITLAB_SECRETS_SECRET_KEY_BASE GITLAB_SECRETS_DB_KEY_BASE SMTP_DOMAIN SMTP_OPENSSL_VERIFY_MODE SMTP_HOST SMTP_PORT SMTP_PASS SMTP_USER DB_NAME DB_PASS NAME PORT rmall runpostgres runredis rungitlab
+run: TAG IP GITLAB_SECRETS_OTP_KEY_BASE GITLAB_SECRETS_SECRET_KEY_BASE GITLAB_SECRETS_DB_KEY_BASE SMTP_DOMAIN SMTP_OPENSSL_VERIFY_MODE SMTP_HOST SMTP_PORT SMTP_PASS SMTP_USER DB_NAME DB_PASS NAME PORT SSH_PORT rmall runpostgres runredis rungitlab
 
 next: grab rminit run
 
@@ -48,6 +48,7 @@ rungitlabinit:
 	$(eval GITLAB_SECRETS_OTP_KEY_BASE := $(shell cat GITLAB_SECRETS_OTP_KEY_BASE))
 	$(eval IP := $(shell cat IP))
 	$(eval PORT := $(shell cat PORT))
+	$(eval SSH_PORT := $(shell cat SSH_PORT))
 	$(eval DB_NAME := $(shell cat DB_NAME))
 	$(eval DB_USER := $(shell cat DB_USER))
 	$(eval DB_PASS := $(shell cat DB_PASS))
@@ -60,6 +61,7 @@ rungitlabinit:
 	--link=$(NAME)-postgresql-init:postgresql \
 	--link=$(NAME)-redis-init:redisio \
 	--publish=$(IP):$(PORT):80 \
+	--publish=$(IP):$(SSH_PORT):22 \
 	--env="DB_NAME=$(DB_NAME)" \
 	--env="GITLAB_SECRETS_DB_KEY_BASE=$(GITLAB_SECRETS_DB_KEY_BASE)" \
 	--env="GITLAB_SECRETS_SECRET_KEY_BASE=$(GITLAB_SECRETS_SECRET_KEY_BASE)" \
@@ -71,6 +73,7 @@ rungitlabinit:
 	--env="SMTP_HOST=$(SMTP_HOST)" \
 	--env="SMTP_PASS=$(SMTP_PASS)" \
 	--env="SMTP_USER=$(SMTP_USER)" \
+	--env='GITLAB_SSH_PORT=$(SSH_PORT)' \
 	--env='REDIS_URL=redis://redis:6379/12' \
 	--cidfile="gitlabinitCID" \
 	$(TAG)
@@ -113,6 +116,7 @@ rungitlab:
 	$(eval GITLAB_SECRETS_OTP_KEY_BASE := $(shell cat GITLAB_SECRETS_OTP_KEY_BASE))
 	$(eval IP := $(shell cat IP))
 	$(eval PORT := $(shell cat PORT))
+	$(eval SSH_PORT := $(shell cat SSH_PORT))
 	$(eval GITLAB_DATADIR := $(shell cat GITLAB_DATADIR))
 	$(eval DB_NAME := $(shell cat DB_NAME))
 	$(eval DB_USER := $(shell cat DB_USER))
@@ -130,6 +134,7 @@ rungitlab:
 	--link=$(NAME)-postgresql:postgresql \
 	--link=$(NAME)-redis:redisio \
 	--publish=$(IP):$(PORT):80 \
+	--publish=$(IP):$(SSH_PORT):22 \
 	--env="GITLAB_SECRETS_DB_KEY_BASE=$(GITLAB_SECRETS_DB_KEY_BASE)" \
 	--env="GITLAB_SECRETS_SECRET_KEY_BASE=$(GITLAB_SECRETS_SECRET_KEY_BASE)" \
 	--env="GITLAB_SECRETS_OTP_KEY_BASE=$(GITLAB_SECRETS_OTP_KEY_BASE)" \
@@ -146,8 +151,9 @@ rungitlab:
 	--env='GITLAB_HTTPS=true' \
 	--env="SMTP_USER=$(SMTP_USER)" \
 	--env="GITLAB_PORT=$(PORT)" \
+	--env='GITLAB_SSH_PORT=$(SSH_PORT)' \
 	--env='REDIS_URL=redis://redis:6379/12' \
-	--volume=$(GITLAB_DATADIR):/home/gitlab/data \
+	--volume=$(GITLAB_DATADIR):/home/git/data \
 	--cidfile="gitlabCID" \
 	$(TAG)
 
@@ -228,7 +234,7 @@ grabmysqldatadir:
 
 grabgitlabdir:
 	-@mkdir -p datadir/gitlab
-	docker cp `cat gitlabinitCID`:/home/gitlab/data  - |sudo tar -C datadir/gitlab/ -pxf -
+	docker cp `cat gitlabinitCID`:/home/git/data  - |sudo tar -C datadir/git/ -pxf -
 	echo `pwd`/datadir/gitlab/data > GITLAB_DATADIR
 
 grabredisdatadir:
@@ -280,6 +286,11 @@ DB_HOST:
 DB_USER:
 	@while [ -z "$$DB_USER" ]; do \
 		read -r -p "Enter the DB_USER you wish to associate with this container [DB_USER]: " DB_USER; echo "$$DB_USER">>DB_USER; cat DB_USER; \
+	done ;
+
+SSH_PORT:
+	@while [ -z "$$SSH_PORT" ]; do \
+		read -r -p "Enter the SSH_PORT you wish to associate with this container [SSH_PORT]: " SSH_PORT; echo "$$SSH_PORT">>SSH_PORT; cat SSH_PORT; \
 	done ;
 
 SMTP_PORT:
@@ -335,7 +346,9 @@ example:
 	echo 'smtp.gmail.com' > SMTP_HOST
 	echo 'www.gmail.com' > SMTP_DOMAIN
 	echo '587' > SMTP_PORT
-	touch 	SMTP_OPENSSL_VERIFY_MODE
+	echo '7022' > SSH_PORT
+	echo '7080' > PORT
+	touch SMTP_OPENSSL_VERIFY_MODE
 
 GITLAB_SECRETS_SECRET_KEY_BASE:
 	pwgen -Bsv1 64 > GITLAB_SECRETS_SECRET_KEY_BASE
