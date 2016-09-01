@@ -148,7 +148,7 @@ rungitlab:
 	--env="SMTP_STARTTLS=$(SMTP_STARTTLS)" \
 	--env="SMTP_DOMAIN=$(SMTP_DOMAIN)" \
 	--env="SMTP_PASS=$(SMTP_PASS)" \
-	--env='GITLAB_HTTPS=true' \
+	--env='GITLAB_HTTPS=false' \
 	--env="SMTP_USER=$(SMTP_USER)" \
 	--env="GITLAB_PORT=$(PORT)" \
 	--env='GITLAB_SSH_PORT=$(SSH_PORT)' \
