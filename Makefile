@@ -185,7 +185,7 @@ rm: kill rm-redimage rm-redcids
 
 rminit: killinit rm-initimage rm-initcids
 
-clean:  rm
+clean:  rm rminit
 
 initenter:
 	docker exec -i -t `cat gitlabinitCID` /bin/bash
