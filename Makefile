@@ -248,6 +248,8 @@ logs:
 initlogs:
 	docker logs -f `cat gitlabinitCID`
 
+templogs: initlogs
+
 NAME:
 	@while [ -z "$$NAME" ]; do \
 		read -r -p "Enter the name you wish to associate with this container [NAME]: " NAME; echo "$$NAME">>NAME; cat NAME; \
