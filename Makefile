@@ -54,7 +54,7 @@ rungitlabinit:
 	docker run --name=$(NAME) \
 	-d \
 	--link=$(NAME)-postgresql-init:postgresql \
-	--link=$(NAME)-redis-init:redis \
+	--link=$(NAME)-redis-init:redisio \
 	--publish=$(IP):$(PORT):80 \
 	--env="DB_NAME=$(DB_NAME)" \
 	--env="DB_USER=$(DB_USER)" \
@@ -117,7 +117,7 @@ rungitlab:
 	docker run --name=$(NAME) \
 	-d \
 	--link=$(NAME)-postgresql:postgresql \
-	--link=$(NAME)-redis:redis \
+	--link=$(NAME)-redis:redisio \
 	--publish=$(IP):$(PORT):80 \
 	--env="DB_NAME=$(DB_NAME)" \
 	--env="DB_USER=$(DB_USER)" \
