@@ -10,9 +10,9 @@ help:
 
 temp: init
 
-init: GITLAB_SECRETS_DB_KEY_BASE TAG IP SMTP_HOST SMTP_PORT SMTP_PASS SMTP_USER DB_USER DB_NAME DB_PASS NAME PORT rmall runpostgresinit runredisinit rungitlabinit
+init: GITLAB_SECRETS_OTP_KEY_BASE GITLAB_SECRETS_DB_KEY_BASE TAG IP SMTP_HOST SMTP_PORT SMTP_PASS SMTP_USER DB_USER DB_NAME DB_PASS NAME PORT rmall runpostgresinit runredisinit rungitlabinit
 
-run: TAG IP GITLAB_SECRETS_DB_KEY_BASE SMTP_DOMAIN SMTP_OPENSSL_VERIFY_MODE SMTP_HOST SMTP_PORT SMTP_PASS SMTP_USER DB_NAME DB_PASS NAME PORT rmall runpostgres runredis rungitlab
+run: TAG IP GITLAB_SECRETS_OTP_KEY_BASE GITLAB_SECRETS_DB_KEY_BASE SMTP_DOMAIN SMTP_OPENSSL_VERIFY_MODE SMTP_HOST SMTP_PORT SMTP_PASS SMTP_USER DB_NAME DB_PASS NAME PORT rmall runpostgres runredis rungitlab
 
 next: grab rminit run
 
@@ -43,6 +43,7 @@ rungitlabinit:
 	$(eval NAME := $(shell cat NAME))
 	$(eval TAG := $(shell cat TAG))
 	$(eval GITLAB_SECRETS_DB_KEY_BASE := $(shell cat GITLAB_SECRETS_DB_KEY_BASE))
+	$(eval GITLAB_SECRETS_OTP_KEY_BASE := $(shell cat GITLAB_SECRETS_OTP_KEY_BASE))
 	$(eval IP := $(shell cat IP))
 	$(eval PORT := $(shell cat PORT))
 	$(eval DB_NAME := $(shell cat DB_NAME))
@@ -59,6 +60,7 @@ rungitlabinit:
 	--publish=$(IP):$(PORT):80 \
 	--env="DB_NAME=$(DB_NAME)" \
 	--env="GITLAB_SECRETS_DB_KEY_BASE=$(GITLAB_SECRETS_DB_KEY_BASE)" \
+	--env="GITLAB_SECRETS_OTP_KEY_BASE=$(GITLAB_SECRETS_OTP_KEY_BASE)" \
 	--env="DB_USER=$(DB_USER)" \
 	--env="DB_PASS=$(DB_PASS)" \
 	--env="GITLAB_PORT=$(PORT)" \
@@ -103,6 +105,7 @@ rungitlab:
 	$(eval NAME := $(shell cat NAME))
 	$(eval TAG := $(shell cat TAG))
 	$(eval GITLAB_SECRETS_DB_KEY_BASE := $(shell cat GITLAB_SECRETS_DB_KEY_BASE))
+	$(eval GITLAB_SECRETS_OTP_KEY_BASE := $(shell cat GITLAB_SECRETS_OTP_KEY_BASE))
 	$(eval IP := $(shell cat IP))
 	$(eval PORT := $(shell cat PORT))
 	$(eval GITLAB_DATADIR := $(shell cat GITLAB_DATADIR))
@@ -123,6 +126,7 @@ rungitlab:
 	--link=$(NAME)-redis:redisio \
 	--publish=$(IP):$(PORT):80 \
 	--env="GITLAB_SECRETS_DB_KEY_BASE=$(GITLAB_SECRETS_DB_KEY_BASE)" \
+	--env="GITLAB_SECRETS_OTP_KEY_BASE=$(GITLAB_SECRETS_OTP_KEY_BASE)" \
 	--env="DB_NAME=$(DB_NAME)" \
 	--env="DB_USER=$(DB_USER)" \
 	--env="DB_PASS=$(DB_PASS)" \
@@ -329,3 +333,6 @@ example:
 
 GITLAB_SECRETS_DB_KEY_BASE:
 	pwgen -Bsv1 64 > GITLAB_SECRETS_DB_KEY_BASE
+
+GITLAB_SECRETS_OTP_KEY_BASE:
+	pwgen -Bsv1 64 > GITLAB_SECRETS_OTP_KEY_BASE
