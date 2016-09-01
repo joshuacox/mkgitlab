@@ -42,6 +42,7 @@ postgresinitCID:
 rungitlabinit:
 	$(eval NAME := $(shell cat NAME))
 	$(eval TAG := $(shell cat TAG))
+	$(eval GITLAB_SECRETS_DB_KEY_BASE := $(shell cat GITLAB_SECRETS_DB_KEY_BASE))
 	$(eval IP := $(shell cat IP))
 	$(eval PORT := $(shell cat PORT))
 	$(eval DB_NAME := $(shell cat DB_NAME))
@@ -57,6 +58,7 @@ rungitlabinit:
 	--link=$(NAME)-redis-init:redisio \
 	--publish=$(IP):$(PORT):80 \
 	--env="DB_NAME=$(DB_NAME)" \
+	--env="GITLAB_SECRETS_DB_KEY_BASE=$(GITLAB_SECRETS_DB_KEY_BASE)" \
 	--env="DB_USER=$(DB_USER)" \
 	--env="DB_PASS=$(DB_PASS)" \
 	--env="GITLAB_PORT=$(PORT)" \
@@ -100,6 +102,7 @@ runpostgres:
 rungitlab:
 	$(eval NAME := $(shell cat NAME))
 	$(eval TAG := $(shell cat TAG))
+	$(eval GITLAB_SECRETS_DB_KEY_BASE := $(shell cat GITLAB_SECRETS_DB_KEY_BASE))
 	$(eval IP := $(shell cat IP))
 	$(eval PORT := $(shell cat PORT))
 	$(eval GITLAB_DATADIR := $(shell cat GITLAB_DATADIR))
@@ -119,6 +122,7 @@ rungitlab:
 	--link=$(NAME)-postgresql:postgresql \
 	--link=$(NAME)-redis:redisio \
 	--publish=$(IP):$(PORT):80 \
+	--env="GITLAB_SECRETS_DB_KEY_BASE=$(GITLAB_SECRETS_DB_KEY_BASE)" \
 	--env="DB_NAME=$(DB_NAME)" \
 	--env="DB_USER=$(DB_USER)" \
 	--env="DB_PASS=$(DB_PASS)" \
