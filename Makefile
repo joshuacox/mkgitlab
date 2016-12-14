@@ -239,7 +239,7 @@ grabgitlabdir:
 
 grabredisdatadir:
 	-@mkdir -p /exports/gitlab/redis
-	docker cp `cat redisinitCID`:/data  - |sudo tar -C /exports/datadir/redis/ -pxf -
+	docker cp `cat redisinitCID`:/data  - |sudo tar -C /exports/gitlab/redis/ -pxf -
 	echo /exports/gitlab/redis > REDIS_DATADIR
 
 logs:
