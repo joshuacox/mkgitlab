@@ -350,6 +350,7 @@ example:
 	echo '587' > SMTP_PORT
 	echo '7022' > SSH_PORT
 	echo '7080' > PORT
+	pwgen -Bsv1 22 > DB_PASS
 	touch SMTP_OPENSSL_VERIFY_MODE
 
 GITLAB_SECRETS_SECRET_KEY_BASE:
